@@ -7,12 +7,15 @@ f.close()
 
 # Values only go up to 25 so we will do a simulation
 # I think we can just do a bfs for part 2 from an outside point
+# some points have 0 for a value, to solve this we will just
+# increment all of the points by 1
 
 grid = [[[0 for i in range(27)] for j in range(27)] for k in range(27)]
 
 points = []
 for line in lines:
     x, y, z = map(int,line.split(","))
+    x += 1; y += 1; z += 1
     grid[x][y][z] = 1
     points.append([x,y,z])
 
@@ -30,6 +33,8 @@ for point in points:
 
 seen = [[[0 for i in range(27)] for j in range(27)] for k in range(27)]
 
+# This stores the points as the bfs progresses
+out2 = 0
 q = deque()
 q.append([0,0,0])
 seen[0][0][0] = 1
@@ -48,6 +53,7 @@ while len(q):
         if not v(x,[0,26]) or not v(y,[0,26]) or not v(z,[0,26]):
             continue
         if grid[x][y][z]:
+            out2 += 1
             continue
         if not seen[x][y][z]:
             seen[x][y][z] = 1
@@ -61,5 +67,5 @@ for point in points:
         if not grid[point[0]+dx[i]][point[1]+dy[i]][point[2]+dz[i]] and seen[point[0]+dx[i]][point[1]+dy[i]][point[2]+dz[i]]:
             out += 1
 
-print(out)
+print(out,out2)
 
